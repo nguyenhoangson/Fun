@@ -19,12 +19,15 @@ TEST(QuickSort, TestPartition){
 
 TEST(QuickSort, TestQuickSort){
   int A[7] = {3, 7, 8, 5, 4, 9, 6};
-  
+  int B[9] = {1, 8, 9, 6, 5, 4, 2, 3, 7};
   int EXPECTED_A[7] = {3, 4, 5, 6, 7, 8, 9};
-
+  int EXPECTED_B[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+  
   quick_sort(A, 0, 6);
+  quick_sort(B, 0, 8);
   
   EXPECT_TRUE(ArrayMatch(EXPECTED_A, A, 7));
+  EXPECT_TRUE(ArrayMatch(EXPECTED_B, B, 9));
 }
 
 int main(int argc, char **argv){
