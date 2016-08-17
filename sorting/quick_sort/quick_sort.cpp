@@ -42,5 +42,14 @@ int partition(int *A, int left, int right){
 
 void quick_sort(int *A, int left, int right){
   /* TODO: fill in code here */
+
+  int q = 0;
+  
+  if(left <= right){
+    q = partition(A, left, right);
+    quick_sort(A, left, q-1);
+    quick_sort(A, q+1, right);
+  }
+  
   return;
 }

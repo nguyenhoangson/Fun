@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
 #include "quick_sort.h"
 
+// custom test
+::testing::AssertionResult ArrayMatch(int *, int *, int);
+
 TEST(QuickSort, TestPartition){
   int A[7] = {3, 7, 8, 5, 4, 9, 6};
   int B[7] = {3, 7, 8, 5, 4, 9, 6};
@@ -15,10 +18,30 @@ TEST(QuickSort, TestPartition){
 }
 
 TEST(QuickSort, TestQuickSort){
-  EXPECT_EQ(1.0, 1.0);
+  int A[7] = {3, 7, 8, 5, 4, 9, 6};
+  
+  int EXPECTED_A[7] = {3, 4, 5, 6, 7, 8, 9};
+
+  quick_sort(A, 0, 6);
+  
+  EXPECT_TRUE(ArrayMatch(EXPECTED_A, A, 7));
 }
 
 int main(int argc, char **argv){
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
+}
+
+// custom test
+::testing::AssertionResult ArrayMatch(int *expected,
+				      int *actual, int size){
+
+  for(int i = 0; i < size; i++){
+    if(*(expected+i) != *(actual+i)){
+      return ::testing::AssertionFailure() << i << "th element: (" << *(expected+i)
+					   << " vs " << *(actual+i) << ")"  << " does not match";
+    }
+  }
+  
+  return ::testing::AssertionSuccess();
 }
