@@ -1,4 +1,4 @@
-all: maximum_sub_array.cpp
-	g++-4.8 maximum_sub_array.cpp -o maximum_sub_array
+all: abbreviation.cpp
+	g++-4.8 abbreviation.cpp -o abbreviation 
 run:
-	./maximum_sub_array
+	./abbreviation
