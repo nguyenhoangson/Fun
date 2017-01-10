@@ -21,4 +21,4 @@ max_length = products['length'].idxmax()
 products['length'][max_length]
 
 # check data types of all columns 
-products.dtypes 
+print(products.dtypes) 

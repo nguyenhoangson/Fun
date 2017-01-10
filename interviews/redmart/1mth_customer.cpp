@@ -1,4 +1,6 @@
-/*** PROBLEM DESCRIPTION
+/*** ================ PROBLEM DESCRIPTION  ================ ***/
+
+/***
 Imagine a little while from now RedMart is closing in fast on delivering its 1 millionth order.
 The marketing team decides to give the customer who makes that order a prize as a gesture of appreciation.
 The prize is a fun one: the lucky customer gets a RedMart delivery tote and 1 hour in the warehouse. 
@@ -33,14 +35,47 @@ product ID, price, length, width, height, weight
 Price is in cents, dimensions are in centimeters, weight is in grams.
 ***/
 
-/*** SOLUTION EXPLAINATION ***/
+/***  ================ SOLUTION EXPLAINATION  ================ ***/
 
-#include <cmath>
+/*** 
+
+  By running inspect_products_data.py, we have noticed that all product price, length, height, width, weight are integers. It's natural to think of dynamic programing (DP) as an approach for this problem.
+
+  Denote by S(i, j) the best combination of products for the set of i first products in products.csv file with volume j - storage capacity of tote (best in terms of price and weight), so we are interested in S(NUM_PRODUCTS, VOLUME) in which NUM_PRODUCTS is the total number of products in products.csv file, VOLUME is volume of the tote
+
+  In order to apply DP, we are to find the recursive relation between S(i, j) and its subproblems. Whenever a new product (i+1)th comes in, we need to update in order to get S(i+1, WHATEVER_VOLUME). We notice that S(i+1, WHATEVER_VOLUME) either contains (i+1)th or not, this gives us a hint that: 
+         S(i+1, WHATEVER_VOLUME) = max(S(i, WHATEVER_VOLUME), 
+	                               S(i, WHATEVER_VOLUME - VOLUME_OF_NEW_PRODUCT) + PRICE_OF_NEW_PRODUCT)  
+  
+  We will use the above recursive relation to find S(NUM_PRODUCTS, VOLUME) by bottom-up approach - building up solution from 
+solutions for subproblems.
+
+***/
+
+/***  ================ CODE EXPLAINATION  ================ ***/
+
+/*** 
+  I have made some minor changes to disregard some unnecessary complications:
+     1. Substituting "," for blank space in products.csv
+     2. Copying products.csv to products.txt file
+     2. Placing number of items at the beginning of products.txt file 
+ 
+  The code will read products.txt line by line, each line corresponds to one product
+
+  I have defined a Cache struct to store meta information of S(i, j) including sum_id, sum_weight, etc. 
+  
+  I have used vector (stores data in heap memory) instead of pure array (stores data in stack memory) offered by C++ to overcome storage limitation of stack memory
+
+  There were 2 vectors S and T. At every iteration, S and  T store solution for S(i, WHATEVER_VOLUME) and S would use T to update in order to get S(i+1, WHATEVER_VOLUME)
+
+  In case S(i, WHATEVER_VOLUME) == S(i, WHATEVER_VOLUME - VOLUME_OF_NEW_PRODUCT) + PRICE_OF_NEW_PRODUCT, it will choose which has a lighter sum_weight for S(i+1, WHATEVER_VOLUME) 
+  
+  You can compile solution by typing "make" in linux, run executable by typing "make run"
+***/
+
 #include <cstdio>
 #include <vector>
 #include <iostream>
-#include <algorithm>
-#include <string>
 #include <ctype.h>
 
 using namespace std;
@@ -58,7 +93,7 @@ int main(){
   // redirect file content to stdin 
   freopen("products.txt", "r", stdin);
 
-  // prevent cin from synchronizing with stdio for performance sake 
+  // prevent cin from synchronizing with stdio to prevent overhead 
   ios::sync_with_stdio(0);
 
   // declare variables
@@ -68,8 +103,8 @@ int main(){
   long long product_volume; 
   
   // get number of items from products.txt file
-  int NUM_ITEMS;
-  cin >> NUM_ITEMS;
+  int NUM_PRODUCTS;
+  cin >> NUM_PRODUCTS;
    
   // define vector S and T to cache the solution for subproblems
   vector<Cache> S;
@@ -87,7 +122,7 @@ int main(){
   }
 
   // run algorithm 
-  for(int i = 1; i <= NUM_ITEMS; i++){
+  for(int i = 1; i <= NUM_PRODUCTS; i++){
 
     // get i_th product from products.txt file 
     cin >> product_id  >> product_price >> product_length >> product_width >> product_height >> product_weight;
@@ -120,7 +155,7 @@ int main(){
       }
     }
 
-    // update T
+    // update T for next iteration
     for(int k = 0; k <= VOLUME; k++)
       T[k] = S[k];
 
