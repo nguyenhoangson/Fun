@@ -51,10 +51,13 @@ int main(){
   
   vector<Interval> result = insert(intervals, interval);
 
+  /*** Print out the result ***/
   for(int i = 0; i < result.size(); i++ ){
     cout << "[" << result.at(i).start << ", " << result.at(i).end << "]" << endl;
     
   }
+
+  /*** TODO: Write unit tests  ***/
 }
 
 vector<Interval> insert(vector<Interval>& intervals, Interval newInterval){
@@ -64,32 +67,36 @@ vector<Interval> insert(vector<Interval>& intervals, Interval newInterval){
   Interval mergedInterval = newInterval; 
   vector<Interval> result;
 
-  
+
+  /* Adding left of merged interval */
   while(counter < size){
 
-    if(intervals.at(counter).start <= mergedInterval.end){
-
-      if(intervals.at(counter).end < mergedInterval.start)
-	result.push_back(intervals.at(counter));
-
-      // Construct the new merged interval
-      else{
-	if(intervals.at(counter).start < mergedInterval.start)
-	  mergedInterval.start = intervals.at(counter).start;
-	if(intervals.at(counter).end > mergedInterval.end)
-	  mergedInterval.end = intervals.at(counter).end;
-      }
-
+    if(intervals.at(counter).end < mergedInterval.start){
+      result.push_back(intervals.at(counter));
     }
     else break;
     
     counter++;
   }
 
+  /* Merge intervals */
+  while(counter < size){
+    if(intervals.at(counter).start <= mergedInterval.end){
+      if(intervals.at(counter).start < mergedInterval.start)
+	mergedInterval.start = intervals.at(counter).start;
+      if(intervals.at(counter).end > mergedInterval.end)
+	mergedInterval.end = intervals.at(counter).end; 
+    }
+    else break;
+    
+    counter++;
+  }
   result.push_back(mergedInterval);
 
-  for(int i = counter; i < size; i++){
-    result.push_back(intervals.at(i));
+  /* Add right of merged interval */
+  while(counter < size){
+    result.push_back(intervals.at(counter));
+    counter++;
   }
   
   return result;
