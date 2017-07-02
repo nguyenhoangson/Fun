@@ -69,26 +69,21 @@ vector<Interval> insert(vector<Interval>& intervals, Interval newInterval){
 
 
   /* Adding left of merged interval */
-  while(counter < size){
-
-    if(intervals.at(counter).end < mergedInterval.start){
-      result.push_back(intervals.at(counter));
-    }
-    else break;
+  while((counter < size) &&
+	(intervals.at(counter).end < mergedInterval.start)){
     
+    result.push_back(intervals.at(counter));
     counter++;
   }
 
   /* Merge intervals */
-  while(counter < size){
-    if(intervals.at(counter).start <= mergedInterval.end){
-      if(intervals.at(counter).start < mergedInterval.start)
-	mergedInterval.start = intervals.at(counter).start;
-      if(intervals.at(counter).end > mergedInterval.end)
-	mergedInterval.end = intervals.at(counter).end; 
-    }
-    else break;
+  while((counter < size) &&
+	(intervals.at(counter).start <= mergedInterval.end)){
     
+    if(intervals.at(counter).start < mergedInterval.start)
+      mergedInterval.start = intervals.at(counter).start;
+    if(intervals.at(counter).end > mergedInterval.end)
+      mergedInterval.end = intervals.at(counter).end;  
     counter++;
   }
   result.push_back(mergedInterval);
