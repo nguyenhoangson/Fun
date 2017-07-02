@@ -56,7 +56,7 @@ int main(){
     cout << "[" << result.at(i).start << ", " << result.at(i).end << "]" << endl;
     
   }
-
+  
   /*** TODO: Write unit tests  ***/
 }
 
@@ -79,11 +79,9 @@ vector<Interval> insert(vector<Interval>& intervals, Interval newInterval){
   /* Merge intervals */
   while((counter < size) &&
 	(intervals.at(counter).start <= mergedInterval.end)){
-    
-    if(intervals.at(counter).start < mergedInterval.start)
-      mergedInterval.start = intervals.at(counter).start;
-    if(intervals.at(counter).end > mergedInterval.end)
-      mergedInterval.end = intervals.at(counter).end;  
+       
+    mergedInterval.start = min(intervals.at(counter).start, mergedInterval.start);
+    mergedInterval.end = max(intervals.at(counter).end, mergedInterval.end);  
     counter++;
   }
   result.push_back(mergedInterval);
